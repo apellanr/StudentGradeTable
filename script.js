@@ -1,11 +1,18 @@
+//Define all global variables here
+
+var student_array = [];
+
+// Listen for the document to load and reset the data to the initial state
+
+$(document).ready(function(){
+
+});
 
 //inputIds - id's of the elements that are used to add students
 // ask Dan or Bill about this
 // @type {string[]}
 
-//Define all global variables here
-
-var student_array = [];
+// var inputIds = ('studentName', 'studentCourse', 'studentGrade');
 
 // addClicked - Event Handler when user clicks the add button
 // only call other functions
@@ -13,11 +20,9 @@ var student_array = [];
 function addClicked() {
     console.log("add was clicked");
     addStudent();
-    addStudentToDom();
-    updateStudentList();
-    updateData();
+}
 
-}// cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
+// cancelClicked - Event Handler when user clicks the cancel button, sahould clear out student form
 //only call other functions
 
 function cancelClicked() {
@@ -32,15 +37,17 @@ function cancelClicked() {
 function addStudent() {
     var student = {
         name: $("#studentName").val(),
-        course: $("#studentCourse").val();
-        grade: $("#studentGrade").val();
+        course: $("#studentCourse").val(),
+        grade: $("#studentGrade").val()
     }
     student_array.push(student);
+    updateData();
 }
 
 //clearAddStudentForm - clears out the form values based on inputIds variable
 
 function clearAddStudentForm() {
+    console.log("form cleared");
     $("#studentName").val("");
     $("#studentCourse").val("");
     $("#studentGrade").val("");
@@ -54,9 +61,11 @@ function clearAddStudentForm() {
 function calculateAverage () {
     var total = 0;
     for (x = 0; x < student_array.length; x++) {
-     total += parseFloat(student_array[x].studentGrade);
+        var averageGrade = 0;
+        total += parseFloat(student_array[x]['studentGrade']);
     }
-    return total / student_array.length;
+    averageGrade = Math.round(total / student_array.length);
+    return averageGrade;
 }
 
 // updateData - centralized function to update the average and call student list update
@@ -64,6 +73,7 @@ function calculateAverage () {
 
 function updateData() {
     var avg = calculateAverage();
+    $(".avgGrade").html(avg);
     updateStudentList();
 }
 
@@ -86,9 +96,3 @@ function addStudentToDom(studentObj) {
 function reset() {
 
 }
-
-// Listen for the document to load and reset the data to the initial state
-
-$(document).ready(function(){
-
-});
