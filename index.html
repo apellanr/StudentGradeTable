@@ -12,11 +12,11 @@
     <div class="page-header">
         <!-- only show this element when the isnt on mobile -->
         <h1 class="hidden-xs hidden-sm">Student Grade Table
-            <small class="pull-right">Grade Average : <span class="avgGrade label label-default">0</span></small>
+            <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
         </h1>
         <!-- only show this element when the user gets to a mobile version -->
         <h3 class="visible-xs visible-sm">Student Grade Table
-            <small class="pull-right">Grade Average : <span class="avgGrade label label-default">0</span></small>
+            <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
         </h3>
     </div>
     <div class="student-add-form container col-md-3 pull-right">
@@ -32,7 +32,7 @@
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-list-alt"></span>
             </span>
-            <input type="text" class="form-control" name="course" id="studentCourse"
+            <input type="text" class="form-control" name="course" id="course"
                    placeholder="Student Course">
         </div>
 
@@ -44,8 +44,8 @@
                    placeholder="Student Grade">
         </div>
 
-        <button type="button" class="btn btn-success add" onclick="addClicked()">Add</button>
-        <button type="button" class="btn btn-default" onclick="cancelClicked()">Cancel</button>
+        <button type="button" class="btn btn-success">Add</button>
+        <button type="button" class="btn btn-default">Cancel</button>
     </div>
     <div class="student-list-container col-md-9">
         <table class="student-list table table-striped">
