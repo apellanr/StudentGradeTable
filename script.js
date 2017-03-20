@@ -9,8 +9,8 @@ function init() {
     console.log('SGT loaded');
     $('.btn-success').click(addClicked);
     $('.btn-default').click(cancelClicked);
-    reset();
     deleteClicked();
+    reset();
 }
 
 //inputIds - id's of the elements that are used to add students
@@ -38,8 +38,10 @@ function addStudent() {
         grade: $("#studentGrade").val()
     };
     student_array.push(studentData);
-    clearAddStudentForm();
+    calculateAverage(student_array);
+    clearAddStudentForm(student_array);
     updateData();
+    return studentData;
 }
 
 // cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
@@ -69,7 +71,16 @@ function calculateAverage() {
     for (x = 0; x < student_array.length; x++) {
         total += parseFloat(student_array[x].grade);
     }
-    return Math.round(total / student_array.length);
+    var studentAvg = (total / student_array.length);
+    studentAvg = Math.round(studentAvg);
+    if (isNaN(studentAvg)) {
+        console.log('no data available');
+        $('.avgGrade').text(0);
+    } else {
+        console.log('student avg: ', studentAvg);
+        $('.avgGrade').text(studentAvg);
+    }
+    return studentAvg;
 }
 
 // updateData - centralized function to update the average and call student list update
@@ -77,12 +88,7 @@ function calculateAverage() {
 
 function updateData() {
     updateStudentList();
-    if(isNaN(calculateAverage) == true) {
-        $('.avgGrade').text(0);
-    }
-    else {
-        $('.avgGrade').text(calculateAverage);
-    }
+    calculateAverage();
 }
 
 // updateStudentList - loops through global student array and appends
@@ -94,7 +100,6 @@ function updateStudentList() {
         var studentObj = student_array[i];
         addStudentToDom(studentObj);
     }
-    calculateAverage();
 }
 
 // addStudentToDom - take in a student object, create html elements from the values
@@ -107,33 +112,35 @@ function addStudentToDom(studentObj) {
     var course = $('<td>').text(studentObj.course);
     var grade = $('<td>').text(studentObj.grade);
     var $deleteDom = $('<td>');
-    var $deleteBtn = $('<button>', {
-        type: 'button',
-        class: 'btn btn-danger',
-        text: 'Delete'
-    });
+    var $deleteBtn = $('<button>').addClass('btn btn-danger').text('Delete');
     $deleteDom.append($deleteBtn);
     ($row).append(name, course, grade, $deleteDom);
     $('.student-list tbody').append($row);
 }
 
-// remove student data
+// remove student data * need to go back and review this code
 
-// function removeStudent(event) {
-//
-// }
+function removeStudent() {
+    console.log('removeStudent');
+
+
+    // var rowIndex = $(event.target).parents('tr');
+    // rowIndex = rowIndex[0].rowIndex;
+    // student_array.splice(rowIndex - 1, 1);
+    // updateData();
+}
 
 // delete button clicked
 
 function deleteClicked() {
- console.log("delete button clicked");
- // removeStudent();
+    console.log("delete button clicked");
+    removeStudent();
 }
 
 // reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
 
 function reset() {
     student_array = [];
-    updateData();
-    clearAddStudentForm();
+    $('.avgGrade').text(0);
+    updateStudentList();
 }
