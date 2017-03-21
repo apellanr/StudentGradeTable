@@ -8,7 +8,7 @@
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <div class="page-header">
         <!-- only show this element when the isnt on mobile -->
         <h1 class="hidden-xs hidden-sm">Student Grade Table
@@ -19,7 +19,7 @@
             <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
         </h3>
     </div>
-    <div class="student-add-form container col-md-3 pull-right">
+    <div class="student-add-form-container col-sm-3 pull-right" style="z-index: 1">
         <h4>Add Student</h4>
         <div class="input-group form-group">
             <span class="input-group-addon">
@@ -47,7 +47,7 @@
         <button type="button" class="btn btn-success">Add</button>
         <button type="button" class="btn btn-default">Cancel</button>
     </div>
-    <div class="student-list-container col-md-9" style="z-index: -1">
+    <div class="student-list-container col-sm-9">
         <table class="student-list table table-striped">
             <thead>
             <tr>
