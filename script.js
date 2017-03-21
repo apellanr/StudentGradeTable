@@ -1,5 +1,4 @@
 // Listen for the document to load and reset the data to the initial state
-
 $(document).ready(init);
 
 //Define all global variables here
@@ -10,6 +9,7 @@ function init() {
     $('.btn-success').click(addClicked);
     $('.btn-default').click(cancelClicked);
     $('.btn-danger').click(removeStudent);
+    $('.btn-info').click(getServerData);
     reset();
 }
 
@@ -21,7 +21,6 @@ function init() {
 
 // addClicked - Event Handler when user clicks the add button
 // only call other functions
-
 function addClicked() {
     console.log("add was clicked");
     addStudent();
@@ -30,7 +29,6 @@ function addClicked() {
 // addStudent - creates a student objects based on input fields in the form and adds the object
 // to global student array written in such a way that you should not get the data from the inputs directly
 // @return undefined
-
 function addStudent() {
     if ($('input').val() === '') {
         return;
@@ -49,14 +47,12 @@ function addStudent() {
 
 // cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
 //only call other functions
-
 function cancelClicked() {
     console.log("cancel button clicked");
     clearAddStudentForm();
 }
 
 //clearAddStudentForm - clears out the form values based on inputIds variable
-
 function clearAddStudentForm() {
     console.log("form cleared");
     $("#studentName").val("");
@@ -68,7 +64,6 @@ function clearAddStudentForm() {
 // @returns {number}
 // needs a function that finds min and max
 // recompute highest and lowest grade with red and green table rows
-
 function calculateAverage() {
     var total = 0;
     for (x = 0; x < student_array.length; x++) {
@@ -88,7 +83,6 @@ function calculateAverage() {
 
 // updateData - centralized function to update the average and call student list update
 // no other code but other functions
-
 function updateData() {
     updateStudentList();
     calculateAverage();
@@ -96,7 +90,6 @@ function updateData() {
 
 // updateStudentList - loops through global student array and appends
 // each objects data into the student-list-container > list-body
-
 function updateStudentList() {
     $('tbody tr').remove();
     for (i = 0; i < student_array.length; i++) {
@@ -108,7 +101,6 @@ function updateStudentList() {
 // addStudentToDom - take in a student object, create html elements from the values
 // and then append the elements into the .student_list > tbody
 // @param studentObj
-
 function addStudentToDom(studentObj) {
     var $row = $('<tr>');
     var name = $('<td>').text(studentObj.name);
@@ -123,22 +115,43 @@ function addStudentToDom(studentObj) {
 }
 
 // delete button clicked
-
 function removeStudent(deletebtn) {
     console.log("delete button clicked");
-    $(deletebtn).click(function(){
-       var rowIndex = $(this).closest('tr').index();
-       $(deletebtn).closest('tr').remove();
-       student_array.splice(rowIndex, 1);
-       updateData();
+    $(deletebtn).click(function () {
+        var rowIndex = $(this).closest('tr').index();
+        $(deletebtn).closest('tr').remove();
+        student_array.splice(rowIndex, 1);
+        updateData();
     });
-
 }
 
-// reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
-
+// reset - resets the application to initial state.
+// Global variables reset, DOM get reset to initial load state
 function reset() {
     student_array = [];
     $('.avgGrade').text(0);
     updateStudentList();
+}
+
+function getServerData() {
+    $.ajax({
+        data: {api_key: 'cAP8RUHTOI'},
+        datatype: 'json',
+        url: 'http://s-apis.learningfuze.com/sgt/get',
+        method: 'POST',
+        success: function (response) {
+            console.log('successful response');
+            if (response.success) {
+                for (i = 0; i < response.data.length; i++) {
+                   data = response.data[i];
+                }
+            }
+
+            //execute code
+        },
+        error: function (response) {
+            console.log('error occurred', response);
+            //execute code
+        }
+    })
 }
