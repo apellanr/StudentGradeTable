@@ -9,7 +9,7 @@ function init() {
     console.log('SGT loaded');
     $('.btn-success').click(addClicked);
     $('.btn-default').click(cancelClicked);
-    $('.btn-danger').click(deleteClicked);
+    $('.btn-danger').click(removeStudent);
     reset();
 }
 
@@ -115,28 +115,23 @@ function addStudentToDom(studentObj) {
     var course = $('<td>').text(studentObj.course);
     var grade = $('<td>').text(studentObj.grade);
     var $deleteDom = $('<td>');
-    var $deleteBtn = $('<button>').addClass('btn btn-danger').attr('onclick','deleteClicked(this)').text('Delete');
+    var $deleteBtn = $('<button>').addClass('btn btn-danger').text('Delete');
     $deleteDom.append($deleteBtn);
     ($row).append(name, course, grade, $deleteDom);
     $('.student-list tbody').append($row);
+    removeStudent($deleteBtn);
 }
-
-// remove student data * need to go back and review this code
-
-function removeStudent() {
-    console.log('removeStudent');
-    var rowIndex = $(this).parents('tr');
-    rowIndex = rowIndex[0].rowIndex;
-    student_array.splice(rowIndex - 1, 1);
-    updateData();
-}
+//attr('onclick','deleteClicked(this)')
 
 // delete button clicked
 
-function deleteClicked($deleteBtn) {
+function removeStudent(deleteBtn) {
     console.log("delete button clicked");
-    $($deleteBtn).closest('tr').remove();
-    removeStudent();
+
+    var rowIndex = $(deleteBtn).closest('tr').index();
+    $(deleteBtn).closest('tr').remove();
+    student_array.splice(rowIndex, 1);
+    updateData();
 }
 
 // reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
