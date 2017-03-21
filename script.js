@@ -32,6 +32,9 @@ function addClicked() {
 // @return undefined
 
 function addStudent() {
+    if($('input').val() === '') {
+        return;
+    }
     var studentData = {
         name: $("#studentName").val(),
         course: $("#course").val(),
@@ -41,13 +44,13 @@ function addStudent() {
     calculateAverage(student_array);
     clearAddStudentForm(student_array);
     updateData();
-    return studentData;
+    return undefined;
 }
 
 // cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
 //only call other functions
 
-function cancelClicked() {
+function cancelClicked() {2
     console.log("cancel button clicked");
     clearAddStudentForm();
 }
