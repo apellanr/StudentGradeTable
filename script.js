@@ -122,12 +122,10 @@ function addStudentToDom(studentObj) {
 
 function removeStudent() {
     console.log('removeStudent');
-
-
-    // var rowIndex = $(event.target).parents('tr');`
-    // rowIndex = rowIndex[0].rowIndex;
-    // student_array.splice(rowIndex - 1, 1);
-    // updateData();
+    var rowIndex = $(this).parents('tr');
+    rowIndex = rowIndex[0].rowIndex;
+    student_array.splice(rowIndex - 1, 1);
+    updateData();
 }
 
 // delete button clicked
