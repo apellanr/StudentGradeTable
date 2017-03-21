@@ -9,7 +9,7 @@ function init() {
     console.log('SGT loaded');
     $('.btn-success').click(addClicked);
     $('.btn-default').click(cancelClicked);
-    deleteClicked();
+    $('.btn-danger').click(deleteClicked);
     reset();
 }
 
@@ -112,7 +112,7 @@ function addStudentToDom(studentObj) {
     var course = $('<td>').text(studentObj.course);
     var grade = $('<td>').text(studentObj.grade);
     var $deleteDom = $('<td>');
-    var $deleteBtn = $('<button>').addClass('btn btn-danger').text('Delete');
+    var $deleteBtn = $('<button>').addClass('btn btn-danger').attr('onclick','deleteClicked(this)').text('Delete');
     $deleteDom.append($deleteBtn);
     ($row).append(name, course, grade, $deleteDom);
     $('.student-list tbody').append($row);
@@ -124,7 +124,7 @@ function removeStudent() {
     console.log('removeStudent');
 
 
-    // var rowIndex = $(event.target).parents('tr');
+    // var rowIndex = $(event.target).parents('tr');`
     // rowIndex = rowIndex[0].rowIndex;
     // student_array.splice(rowIndex - 1, 1);
     // updateData();
@@ -132,8 +132,9 @@ function removeStudent() {
 
 // delete button clicked
 
-function deleteClicked() {
+function deleteClicked($deleteBtn) {
     console.log("delete button clicked");
+    $($deleteBtn).closest('tr').remove();
     removeStudent();
 }
 
