@@ -32,7 +32,7 @@ function addClicked() {
 // @return undefined
 
 function addStudent() {
-    if($('input').val() === '') {
+    if ($('input').val() === '') {
         return;
     }
     var studentData = {
@@ -50,7 +50,7 @@ function addStudent() {
 // cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
 //only call other functions
 
-function cancelClicked() {2
+function cancelClicked() {
     console.log("cancel button clicked");
     clearAddStudentForm();
 }
@@ -106,7 +106,7 @@ function updateStudentList() {
 }
 
 // addStudentToDom - take in a student object, create html elements from the values
-// and then append the elements into the .student_list tbody
+// and then append the elements into the .student_list > tbody
 // @param studentObj
 
 function addStudentToDom(studentObj) {
@@ -121,17 +121,18 @@ function addStudentToDom(studentObj) {
     $('.student-list tbody').append($row);
     removeStudent($deleteBtn);
 }
-//attr('onclick','deleteClicked(this)')
 
 // delete button clicked
 
-function removeStudent(deleteBtn) {
+function removeStudent(deletebtn) {
     console.log("delete button clicked");
+    $(deletebtn).click(function(){
+       var rowIndex = $(this).closest('tr').index();
+       $(deletebtn).closest('tr').remove();
+       student_array.splice(rowIndex, 1);
+       updateData();
+    });
 
-    var rowIndex = $(deleteBtn).closest('tr').index();
-    $(deleteBtn).closest('tr').remove();
-    student_array.splice(rowIndex, 1);
-    updateData();
 }
 
 // reset - resets the application to initial state. Global variables reset, DOM get reset to initial load state
