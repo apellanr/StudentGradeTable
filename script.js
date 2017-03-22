@@ -143,15 +143,14 @@ function getServerData() {
             console.log('successful response');
             if (response.success) {
                 for (i = 0; i < response.data.length; i++) {
-                   data = response.data[i];
+                   student_array.push(response.data[i]);
                 }
+                updateData();
             }
-
-            //execute code
         },
         error: function (response) {
             console.log('error occurred', response);
             //execute code
         }
-    })
+    });
 }
