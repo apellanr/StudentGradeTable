@@ -25,7 +25,7 @@
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-user"></span>
             </span>
-            <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name">
+            <input type="text" class="form-control" name="studentName" id="name" placeholder="Student Name">
         </div>
 
         <div class="input-group form-group">
@@ -40,12 +40,12 @@
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-education"></span>
             </span>
-            <input type="text" class="form-control" name="studentGrade" id="studentGrade"
+            <input type="text" class="form-control" name="studentGrade" id="grade"
                    placeholder="Student Grade">
         </div>
-        <button type="button" class="btn btn-success" style="margin-top: 2px">Add</button>
-        <button type="button" class="btn btn-default" style="margin-top: 2px">Cancel</button>
-        <button type="button" class="btn btn-info" style="margin-top: 2px">Data From Server</button>
+        <button type="button" id="addBtn" class="btn btn-success" style="margin-top: 2px">Add</button>
+        <button type="button" id="cancelBtn" class="btn btn-default" style="margin-top: 2px">Cancel</button>
+        <button type="button" id="serverBtn" class="btn btn-info" style="margin-top: 2px">Data From Server</button>
     </div>
     <div class="student-list-container col-sm-9">
         <table class="student-list table table-striped">
@@ -57,10 +57,11 @@
                 <th>Operations</th>
             </tr>
             </thead>
-            <tbody class=".table-striped">
+            <tbody id="tbody" class=".table-striped">
             </tbody>
         </table>
     </div>
 </div>
+
 </body>
 </html>

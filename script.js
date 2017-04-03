@@ -6,18 +6,17 @@ var student_array = [];
 
 function init() {
     console.log('SGT loaded');
-    $('.btn-success').click(addClicked);
-    $('.btn-default').click(cancelClicked);
+    $('#addBtn').click(addClicked);
+    $('#cancelBtn').click(cancelClicked);
     $('.btn-danger').click(removeStudent);
-    $('.btn-info').click(getServerData);
-    reset();
+    $('#serverBtn').click(getServerData);
+    // reset();
 }
 
 //inputIds - id's of the elements that are used to add students
-// ask Dan or Bill about this
 // @type {string[]}
 
-// var inputIds = ('studentName', 'course', 'studentGrade');
+var inputIds = ('studentName', 'course', 'studentGrade');
 
 // addClicked - Event Handler when user clicks the add button
 // only call other functions
@@ -33,16 +32,19 @@ function addStudent() {
     if ($('input').val() === '') {
         return;
     }
+    var studentName = $("#studentName").val();
+    var studentCourse = $("#course").val();
+    var studentGrade = $("#studentGrade").val();
     var studentData = {
-        name: $("#studentName").val(),
-        course: $("#course").val(),
-        grade: $("#studentGrade").val()
+        name: studentName,
+        course: studentCourse,
+        grade: studentGrade
     };
     student_array.push(studentData);
     calculateAverage(student_array);
-    clearAddStudentForm(student_array);
+    clearAddStudentForm();
     updateData();
-    return undefined;
+    return studentData;
 }
 
 // cancelClicked - Event Handler when user clicks the cancel button, should clear out student form
@@ -91,7 +93,7 @@ function updateData() {
 // updateStudentList - loops through global student array and appends
 // each objects data into the student-list-container > list-body
 function updateStudentList() {
-    $('tbody tr').remove();
+    // $('tbody tr').remove();
     for (i = 0; i < student_array.length; i++) {
         var studentObj = student_array[i];
         addStudentToDom(studentObj);
@@ -103,16 +105,18 @@ function updateStudentList() {
 // @param studentObj
 function addStudentToDom(studentObj) {
     var $row = $('<tr>');
-    var name = $('<td>').text(studentObj.name);
-    var course = $('<td>').text(studentObj.course);
-    var grade = $('<td>').text(studentObj.grade);
+    var $name = $('<td>').text(studentObj.name);
+    var $course = $('<td>').text(studentObj.course);
+    var $grade = $('<td>').text(studentObj.grade);
     var $deleteDom = $('<td>');
     var $deleteBtn = $('<button>').addClass('btn btn-danger').text('Delete');
     $deleteDom.append($deleteBtn);
-    ($row).append(name, course, grade, $deleteDom);
+    ($row).append($name, $course, $grade, $deleteDom);
     $('.student-list tbody').append($row);
     removeStudent($deleteBtn);
 }
+
+
 
 // delete button clicked
 function removeStudent(deletebtn) {
@@ -130,7 +134,6 @@ function removeStudent(deletebtn) {
 function reset() {
     student_array = [];
     $('.avgGrade').text(0);
-    updateStudentList();
 }
 
 function getServerData() {
@@ -138,19 +141,19 @@ function getServerData() {
         data: {api_key: 'cAP8RUHTOI'},
         datatype: 'json',
         url: 'http://s-apis.learningfuze.com/sgt/get',
-        method: 'POST',
+        method: 'post',
         success: function (response) {
-            console.log('successful response');
-            if (response.success) {
-                for (i = 0; i < response.data.length; i++) {
-                   student_array.push(response.data[i]);
-                }
-                updateData();
-            }
-        },
-        error: function (response) {
-            console.log('error occurred', response);
-            //execute code
+            console.log('call success', response);
+            student_array.push(response.data);
+            updateData();
+            // if (response.success) {
+            //     for (var j = 0; j < response.data.length; j++) {
+            //         student_array = student_array.push(response[j]);
+
         }
+        // error: function (response) {
+        //     console.log('error occurred', response);
+        //     //execute code
+        // }
     });
 }
