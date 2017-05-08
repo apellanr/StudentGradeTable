@@ -1,14 +1,17 @@
-/**
+
+/*
  * Define all global variables here
  */
-/**
+
+/*
  * student_array - global array to hold student objects
  * @type {Array}
  */
 
-/**
+/*
  * inputIds - id's of the elements that are used to add students
  * @type {string[]}
+   // selector that selects the elements - need a DOC ready to test selector
  */
 
 /**
@@ -21,7 +24,7 @@
 
 /**
  * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
- *
+   // calls clearAddStudentForm();
  * @return undefined
  */
 
@@ -32,10 +35,13 @@
 /**
  * calculateAverage - loop through the global student array and calculate average grade and return that value
  * @returns {number}
+   // calculate average after all the for loop is complete
+   // only need to calculate at the end of the for loop
  */
 
 /**
  * updateData - centralized function to update the average and call student list update
+ *
  */
 
 /**
@@ -56,3 +62,4 @@
 /**
  * Listen for the document to load and reset the data to the initial state
  */
+
