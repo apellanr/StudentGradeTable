@@ -1,11 +1,12 @@
 // listen for the document to load and reset the data to the initial state
 $(document).ready(createSGT);
 
-var studentInfo = null;
+var sgt = null;
 
 function createSGT() {
-    studentInfo = new StudentGradeTable();
-    studentInfo.init();
+    sgt = new StudentGradeTable();
+    sgt.init();
+    // sgt.reset();
 }
 
 function StudentGradeTable() {
@@ -24,29 +25,29 @@ function StudentGradeTable() {
 
     // function for event listeners
     this.eventHandlers = function() {
-        this.addButton.click(this.addClicked);
-        this.cancelButton.click(this.cancelClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
+        this.addButton.click(this.addButtonClicked.bind(this));
+        this.cancelButton.click(this.cancelButtonClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
     };
 
     // event handler when user clicks the add button
-    this.addClicked = function() {
+    this.addButtonClicked = function() {
         console.log("add button was clicked");
-        self.addStudent();
+        this.addStudent();
+        this.updateData();
     };
 
     // event handler when user clicks the cancel button, should clear out student form too
-    this.cancelClicked = function() {
+    this.cancelButtonClicked = function() {
         console.log("cancel button clicked");
         this.clearStudentAddForm();
     };
 
-    //creates a student object based on input fields in the form
-    // and adds the object to global student array
+    // creates a student object based on input fields in the form
+    // adds the object to global student array
     // calls clearAddStudentForm();
     // return undefined;
     this.addStudent = function() {
-        // need to pull values of input fields
-        var studentObject = {
+        var studentObject = { // need to pull values of input fields
             name: this.studentName.val(),
             course: this.studentCourse.val(),
             grade: this.studentGrade.val()
@@ -56,11 +57,44 @@ function StudentGradeTable() {
         this.clearStudentAddForm();
     };
 
-    // clears out the form values based on inputIds variable
-    this.clearStudentAddForm = function() {
-        self.studentName.val('');
-        self.studentCourse.val('');
-        self.studentGrade.val('');
+    // loops through global student array and appends each objects data into the table structure
+    // incorrect so modify necessary references : student-list-container > list-body
+    this.updateStudentList = function() {
+        // $('tbody').empty(); // removes the child elements from the selected element
+        for(var i = 0; i < this.studentArr.length; i++) {
+            this.addStudentToDom(this.studentArr[i]);
+        }
+    };
+
+    this.addStudentToDom = function(studentObj) {
+        console.log('add test');
+        var $tRow = $("<tr>");
+        var $tdName = $("<td>").text(studentObj.name);
+        var $tdCourse = $("<td>").text(studentObj.course);
+        var $tdGrade = $("<td>").text(studentObj.grade);
+        var $tdDelete = $("<td>");
+        var $deleteButton = $("<button>",{
+            class: "btn btn-danger",
+            text: "Delete",
+            type: "button"
+        });
+        console.log('elements created');
+        (function(self){
+            $tdDelete.append($deleteButton);
+            $tRow.append($tdName, $tdCourse, $tdGrade, $tdDelete);
+            $('#tableBody').append($tRow);
+            $tRow.on('click', 'button', function(){
+                var deletePosition = $tRow.index(); // gets index of element relative to selector
+                $tRow.remove(); // need to remove the selected element
+                self.studentArr.splice(deletePosition, 1);
+                self.updateData();
+            });
+        })(this);
+    };
+
+    // centralized function to update the average and call student list update function
+    this.updateData = function() {
+        this.updateStudentList();
     };
 
     // loop through the global student array and calculate average grade
@@ -70,29 +104,17 @@ function StudentGradeTable() {
 
     };
 
-    // centralized function to update the average and call student list update function
-    this.updateData = function() {
-
-    };
-
-    // loops through global student arrat and appends each objects data into the table structure
-    // incorrect so modify necessary references : student-list-container > list-body
-    this.updateStudentList = function() {
-
-    };
-
-    // take in a studentObject, create HTML elements from the values
-    // append the element into the .student_list tbody
-    // @ param studentObj
-    this.addStudentToDom = function(studentObj) {
-
+    // clears out the form values based on inputIds variable
+    this.clearStudentAddForm = function() {
+        this.studentName.val('');
+        this.studentCourse.val('');
+        this.studentGrade.val('');
     };
 
     // resets the application to initial state. global variables reset
     // DOM get reset to initial load state
     this.reset = function() {
-        self.studentArr = [];
-
+        this.studentArr = [];
     };
 
 }
