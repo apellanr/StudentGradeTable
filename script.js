@@ -10,7 +10,6 @@ function createSGT() {
 }
 
 function StudentGradeTable() {
-    var self = this;
     this.studentArr = []; // will hold student object
     this.studentName = $("#studentName"); // id's of the elements that are used to add students
     this.studentCourse = $("#course"); // selector that selects the elements
