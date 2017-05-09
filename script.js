@@ -116,6 +116,5 @@ function StudentGradeTable() {
     this.reset = function() {
         this.studentArr = [];
     };
-
 }
 
