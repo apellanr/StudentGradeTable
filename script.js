@@ -18,8 +18,17 @@ function StudentGradeTable() {
         console.log("init");
         this.model = new Model(this);
         this.view = new View(this);
-        // this.model.init();
+        this.model.init();
         this.view.init();
+        this.eventHandlers();
+    };
+    this.eventHandlers = function() {
+        this.textInputs = $(".form-control");
+        this.textInputs.keypress(this.validateKeypress);
+        this.addButton = $(".add");
+        this.addButton.click(this.addButtonClicked.bind(this.controller));
+        this.cancelButton = $(".cancel");
+        this.cancelButton.click(this.cancelButtonClicked.bind(this.controller)); // was experiencing cancel button error. need to use .bind(this)
     };
 
     this.reset = function() {
@@ -27,10 +36,28 @@ function StudentGradeTable() {
         this.view.clearStudentAddForm();
     };
 
+    this.validateKeypress = function(event) {
+        if(event.keyCode === 13) {
+            $(".add").click();
+        }
+    };
+
+    this.addButtonClicked = function() {
+        console.log("add button was clicked", this);
+        this.model.addStudent();
+        this.model.updateData();
+    };
+
+    this.cancelButtonClicked = function() {
+        console.log("cancel button clicked");
+        this.clearStudentAddForm();
+    };
+
     // **** MODEL **** //
     // for the domain layer. adding and removing data
-    function Model(View) {
+    function Model(View, Controller) {
         this.view= View;
+        this.controller = Controller;
         this.studentArr = []; // will hold student object
         this.studentName = $("#studentName"); // id's of the elements that are used to add students
         this.studentCourse = $("#course"); // selector that selects the elements
@@ -56,7 +83,7 @@ function StudentGradeTable() {
         this.updateStudentList = function() {
             $("tbody tr").remove(); // removes elements out of the DOM
             for(var i = 0; i < this.studentArr.length; i++) {
-                this.view.addStudentToDom(this.studentArr[i]);
+                this.addStudentToDom(this.studentArr[i]);
             }
         };
 
@@ -85,30 +112,7 @@ function StudentGradeTable() {
         this.controller = controller;
         // initialize constructor function
         this.init = function() {
-            this.textInputs = $(".form-control");
-            this.textInputs.keypress(this.validateKeypress);
-            this.addButton = $(".add");
-            this.addButton.click(this.addButtonClicked.bind(this.controller));
-            this.cancelButton = $(".cancel");
-            this.cancelButton.click(this.cancelButtonClicked.bind(this.controller)); // was experiencing cancel button error. need to use .bind(this)
-            // this.eventHandlers();
-        };
 
-        this.validateKeypress = function(event) {
-            if(event.keyCode === 13) {
-                $(".add").click();
-            }
-        };
-
-        this.addButtonClicked = function() {
-            console.log("add button was clicked", this);
-            this.model.addStudent();
-            this.model.updateData();
-        };
-
-        this.cancelButtonClicked = function() {
-            console.log("cancel button clicked");
-            this.clearStudentAddForm();
         };
 
         this.addStudentToDom = function(studentObj) {
@@ -139,9 +143,9 @@ function StudentGradeTable() {
         };
 
         this.clearStudentAddForm = function() {
-            this.studentName.val('');
-            this.studentCourse.val('');
-            this.studentGrade.val('');
+            $("#studentName").val('');
+            $("#course").val('');
+            $("#studentGrade").val('');
         };
     }
 }
