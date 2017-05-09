@@ -18,6 +18,7 @@ function StudentGradeTable() {
 
     // initialize constructor function
     this.init = function() {
+        this.textInputs = $(".form-control");
         this.addButton = $(".add");
         this.cancelButton = $(".cancel");
         this.eventHandlers();
@@ -25,8 +26,15 @@ function StudentGradeTable() {
 
     // function for event listeners
     this.eventHandlers = function() {
+        this.textInputs.keypress(this.validateKeypress);
         this.addButton.click(this.addButtonClicked.bind(this));
         this.cancelButton.click(this.cancelButtonClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
+    };
+
+    this.validateKeypress = function(event) {
+        if(event.keyCode === 13) {
+            $(".add").click();
+        }
     };
 
     // event handler when user clicks the add button
@@ -46,6 +54,7 @@ function StudentGradeTable() {
     // adds the object to global student array
     // calls clearAddStudentForm();
     // return undefined;
+
     this.addStudent = function() {
         var studentObject = { // need to pull values of input fields
             name: this.studentName.val(),
@@ -60,14 +69,14 @@ function StudentGradeTable() {
     // loops through global student array and appends each objects data into the table structure
     // incorrect so modify necessary references : student-list-container > list-body
     this.updateStudentList = function() {
-        // $('tbody').empty(); // removes the child elements from the selected element
+        $("tbody tr").remove(); // removes elements out of the DOM
         for(var i = 0; i < this.studentArr.length; i++) {
+            this.studentArr[i].id = i;
             this.addStudentToDom(this.studentArr[i]);
         }
     };
 
     this.addStudentToDom = function(studentObj) {
-        console.log('add test');
         var $tRow = $("<tr>");
         var $tdName = $("<td>").text(studentObj.name);
         var $tdCourse = $("<td>").text(studentObj.course);
@@ -76,7 +85,8 @@ function StudentGradeTable() {
         var $deleteButton = $("<button>",{
             class: "btn btn-danger",
             text: "Delete",
-            type: "button"
+            type: "button",
+            id: studentObj.id
         });
         console.log('elements created');
         (function(self){
