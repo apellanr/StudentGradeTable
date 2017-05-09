@@ -6,7 +6,7 @@ var sgt = null;
 function createSGT() {
     sgt = new StudentGradeTable();
     sgt.init();
-    // sgt.reset();
+    sgt.reset();
 }
 
 function StudentGradeTable() {
@@ -114,5 +114,6 @@ function StudentGradeTable() {
     // DOM get reset to initial load state
     this.reset = function() {
         this.studentArr = [];
+        this.clearStudentAddForm();
     };
 }
