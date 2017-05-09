@@ -15,7 +15,6 @@ function StudentGradeTable() {
     this.studentName = $("#studentName"); // id's of the elements that are used to add students
     this.studentCourse = $("#course"); // selector that selects the elements
     this.studentGrade = $("#studentGrade"); // need a DOC ready to test selector
-
     // initialize constructor function
     this.init = function() {
         this.textInputs = $(".form-control");
@@ -23,38 +22,27 @@ function StudentGradeTable() {
         this.cancelButton = $(".cancel");
         this.eventHandlers();
     };
-
     // function for event listeners
     this.eventHandlers = function() {
         this.textInputs.keypress(this.validateKeypress);
         this.addButton.click(this.addButtonClicked.bind(this));
         this.cancelButton.click(this.cancelButtonClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
     };
-
     this.validateKeypress = function(event) {
         if(event.keyCode === 13) {
             $(".add").click();
         }
     };
-
-    // event handler when user clicks the add button
     this.addButtonClicked = function() {
         console.log("add button was clicked");
         this.addStudent();
         this.updateData();
     };
-
-    // event handler when user clicks the cancel button, should clear out student form too
     this.cancelButtonClicked = function() {
         console.log("cancel button clicked");
         this.clearStudentAddForm();
     };
-
-    // creates a student object based on input fields in the form
-    // adds the object to global student array
-    // calls clearAddStudentForm();
-    // return undefined;
-
+    // return undefined; ??
     this.addStudent = function() {
         var studentObject = { // need to pull values of input fields
             name: this.studentName.val(),
@@ -65,17 +53,12 @@ function StudentGradeTable() {
         this.studentArr.push(studentObject);
         this.clearStudentAddForm();
     };
-
-    // loops through global student array and appends each objects data into the table structure
-    // incorrect so modify necessary references : student-list-container > list-body
     this.updateStudentList = function() {
         $("tbody tr").remove(); // removes elements out of the DOM
         for(var i = 0; i < this.studentArr.length; i++) {
-            this.studentArr[i].id = i;
             this.addStudentToDom(this.studentArr[i]);
         }
     };
-
     this.addStudentToDom = function(studentObj) {
         var $tRow = $("<tr>");
         var $tdName = $("<td>").text(studentObj.name);
@@ -101,26 +84,21 @@ function StudentGradeTable() {
             });
         })(this);
     };
-
     // centralized function to update the average and call student list update function
     this.updateData = function() {
         this.updateStudentList();
     };
-
     // loop through the global student array and calculate average grade
     // return the value { number }
     // calculate average at the end of the for loop
     this.calculateAverage = function() {
 
     };
-
-    // clears out the form values based on inputIds variable
     this.clearStudentAddForm = function() {
         this.studentName.val('');
         this.studentCourse.val('');
         this.studentGrade.val('');
     };
-
     // resets the application to initial state. global variables reset
     // DOM get reset to initial load state
     this.reset = function() {
