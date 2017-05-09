@@ -6,34 +6,19 @@ var sgt = null;
 function createSGT() {
     sgt = new StudentGradeTable();
     sgt.init();
-    sgt.reset();
+    console.log(sgt);
+    // sgt.reset();
 }
 
+// CONTROLLER
 function StudentGradeTable() {
-    this.studentArr = []; // will hold student object
-    this.studentName = $("#studentName"); // id's of the elements that are used to add students
-    this.studentCourse = $("#course"); // selector that selects the elements
-    this.studentGrade = $("#studentGrade"); // need a DOC ready to test selector
-
-    // initialize constructor function
+    this.model = null;
+    this.view = null;
     this.init = function() {
-        this.textInputs = $(".form-control");
-        this.addButton = $(".add");
-        this.cancelButton = $(".cancel");
-        this.eventHandlers();
-    };
-
-    // function for event listeners
-    this.eventHandlers = function() {
-        this.textInputs.keypress(this.validateKeypress);
-        this.addButton.click(this.addButtonClicked.bind(this));
-        this.cancelButton.click(this.cancelButtonClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
-    };
-
-    this.validateKeypress = function(event) {
-        if(event.keyCode === 13) {
-            $(".add").click();
-        }
+      this.model = new Model(this);
+      this.view = new View(this);
+      this.model.init();
+      this.view.init();
     };
 
     this.addButtonClicked = function() {
@@ -47,22 +32,87 @@ function StudentGradeTable() {
         this.clearStudentAddForm();
     };
 
-    // return undefined; ??
-    this.addStudent = function() {
-        var studentObject = { // need to pull values of input fields
-            name: this.studentName.val(),
-            course: this.studentCourse.val(),
-            grade: this.studentGrade.val()
+
+
+
+    // **** MODEL **** //
+    // for the domain layer. adding and removing data
+    function Model(controller) {
+        this.controller = controller;
+        this.studentArr = []; // will hold student object
+
+        this.init = function() {
+
         };
-        console.log("student obj test", studentObject);
-        this.studentArr.push(studentObject);
-        this.clearStudentAddForm();
+
+        // return undefined; ??
+        this.addStudent = function() {
+            var studentObject = { // need to pull values of input fields
+                name: this.studentName.val(),
+                course: this.studentCourse.val(),
+                grade: this.studentGrade.val()
+            };
+            console.log("student obj test", studentObject);
+            this.studentArr.push(studentObject);
+            this.clearStudentAddForm();
+        };
+
+        this.updateStudentList = function() {
+            $("tbody tr").remove(); // removes elements out of the DOM
+            for(var i = 0; i < this.studentArr.length; i++) {
+                this.addStudentToDom(this.studentArr[i]);
+            }
+        };
+
+        // centralized function to update the average and call student list update function
+        this.updateData = function() {
+            this.updateStudentList();
+        };
+
+        // loop through the global student array and calculate average grade
+        // return the value { number }
+        // calculate average at the end of the for loop
+        this.calculateAverage = function() {
+
+        };
+
+        // resets the application to initial state. global variables reset
+        // DOM get reset to initial load state
+        this.reset = function() {
+            this.studentArr = [];
+            this.clearStudentAddForm();
+        };
+    }
+
+}
+
+
+
+
+// **** VIEW **** //
+function View(controller) {
+    this.controller = controller;
+    this.studentName = $("#studentName"); // id's of the elements that are used to add students
+    this.studentCourse = $("#course"); // selector that selects the elements
+    this.studentGrade = $("#studentGrade"); // need a DOC ready to test selector
+
+    // initialize constructor function
+    this.init = function() {
+        this.textInputs = $(".form-control");
+        this.addButton = $(".add");
+        this.cancelButton = $(".cancel");
+        this.eventHandlers();
+    };
+    // function for event listeners
+    this.eventHandlers = function() {
+        this.textInputs.keypress(this.validateKeypress);
+        this.addButton.click(this.addButtonClicked.bind(this));
+        this.cancelButton.click(this.cancelButtonClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
     };
 
-    this.updateStudentList = function() {
-        $("tbody tr").remove(); // removes elements out of the DOM
-        for(var i = 0; i < this.studentArr.length; i++) {
-            this.addStudentToDom(this.studentArr[i]);
+    this.validateKeypress = function(event) {
+        if(event.keyCode === 13) {
+            $(".add").click();
         }
     };
 
@@ -92,28 +142,9 @@ function StudentGradeTable() {
         })(this);
     };
 
-    // centralized function to update the average and call student list update function
-    this.updateData = function() {
-        this.updateStudentList();
-    };
-
-    // loop through the global student array and calculate average grade
-    // return the value { number }
-    // calculate average at the end of the for loop
-    this.calculateAverage = function() {
-
-    };
-
     this.clearStudentAddForm = function() {
         this.studentName.val('');
         this.studentCourse.val('');
         this.studentGrade.val('');
-    };
-
-    // resets the application to initial state. global variables reset
-    // DOM get reset to initial load state
-    this.reset = function() {
-        this.studentArr = [];
-        this.clearStudentAddForm();
     };
 }
