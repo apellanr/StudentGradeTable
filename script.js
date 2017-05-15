@@ -119,22 +119,22 @@ this.addStudentToServer = function(name, course, grade) {
  * @return undefined
  */
     this.addStudent = function() {
-        var studentObject = { // need to pull values of input fields
+        var studentObj = { // need to pull values of input fields
             name: this.studentName.val(),
             course: this.studentCourse.val(),
             grade: this.studentGrade.val()
         };
         // users are required to input valid values into input fields
-        if(studentObject.name === '' || studentObject.course === '' || studentObject.grade === '') {
+        if(studentObj.name === '' || studentObj.course === '' || studentObj.grade === '') {
             return;
         }
         // eliminates users from entering input other than a num
-        if(isNaN(studentObject.grade)) {
+        if(isNaN(studentObj.grade)) {
             return;
         }
-        console.log("student obj test", studentObject);
-        this.studentArr.push(studentObject);
-        this.addStudentToServer(studentObject);
+        console.log("student obj test", studentObj);
+        this.studentArr.push(studentObj);
+        this.addStudentToServer(studentObj.name, studentObj.course, studentObj.grade);
         this.clearStudentAddForm();
     };
 
