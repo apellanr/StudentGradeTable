@@ -78,9 +78,37 @@ this.getServerData = function() {
             var server_data = response.data;
             self.studentArr = self.studentArr.concat(server_data);
             self.updateStudentList(self.studentArr);
+            self.calculateAverage();
         },
         error: function(response) {
             console.error('error in ajax call', response);
+            self.errorModal();
+        }
+    });
+};
+
+/**
+ * Upload to Server AJAX
+ * make sure to record the student's ID, given by the database
+ */
+this.addStudentToServer = function(name, course, grade) {
+    console.log('adding student to server');
+    $.ajax({
+        url: 'http://s-apis.learningfuze.com/sgt/create',
+        data: {
+            'api_key': 'cAP8RUHTOI',
+            'name': name,
+            'course': course,
+            'grade': grade
+        },
+        dataType: 'json',
+        method: 'post',
+        success: function(data) {
+            console.log('data sent to server: ', data);
+
+        },
+        error: function(data) {
+            console.log('error with data submission: ', data);
             self.errorModal();
         }
     });
@@ -106,6 +134,7 @@ this.getServerData = function() {
         }
         console.log("student obj test", studentObject);
         this.studentArr.push(studentObject);
+        this.addStudentToServer(studentObject);
         this.clearStudentAddForm();
     };
 
