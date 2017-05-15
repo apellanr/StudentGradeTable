@@ -10,6 +10,7 @@ function createSGT() {
  * SGT constructor
  */
 function StudentGradeTable() {
+    var self = this;
     this.studentArr = []; // will hold student object
     this.studentName = $("#studentName"); // id's of the elements that are used to add students
     this.studentCourse = $("#course"); // selector that selects the elements
@@ -43,13 +44,6 @@ function StudentGradeTable() {
     };
 
 /**
- * Get Server data AJAX call
- */
-    this.getServerData = function() {
-      console.log('grabbing server data');
-    };
-
-/**
  * addClicked - Event Handler when user clicks the add button
  */
     this.addButtonClicked = function() {
@@ -65,6 +59,30 @@ function StudentGradeTable() {
         console.log("cancel button clicked");
         this.clearStudentAddForm();
     };
+
+/**
+ * Get Server data AJAX call
+ */
+this.getServerData = function() {
+    console.log('grabbing server data');
+    $.ajax({
+        url: 'http://s-apis.learningfuze.com/sgt/get',
+        data: {
+          'api_key': 'cAP8RUHTOI'
+        },
+        dataType: 'json',
+        method: 'post',
+        success : function(response) { // store response in a variable
+            console.log('LFZ SGT response: ', response);
+            var server_data = response.data;
+            self.studentArr = self.studentArr.concat(server_data);
+            self.updateStudentList(self.studentArr);
+        },
+        error: function(response) {
+            console.error('error in ajax call', response);
+        }
+    });
+};
 
 /**
  * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
