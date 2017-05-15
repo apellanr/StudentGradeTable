@@ -168,7 +168,6 @@ this.getServerData = function() {
         for(var i = 0; i < this.studentArr.length; i++) {
             gradeValue = parseInt(this.studentArr[i].grade);
             gradeTotal += gradeValue; // concatenate gradeValue to total
-            console.log(gradeTotal);
         }
         average = Math.floor(gradeTotal / this.studentArr.length);
         console.log("testing average calc", average);
