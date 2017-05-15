@@ -74,7 +74,7 @@ this.getServerData = function() {
         dataType: 'json',
         method: 'post',
         success : function(response) { // store response in a variable
-            console.log('LFZ SGT response: ', response);
+            console.log(response);
             var server_data = response.data;
             self.studentArr = self.studentArr.concat(server_data);
             self.updateStudentList(self.studentArr);
