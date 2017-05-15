@@ -22,6 +22,7 @@ function StudentGradeTable() {
         this.textInputs = $(".form-control");
         this.addButton = $(".add");
         this.cancelButton = $(".cancel");
+        this.serverButton = $(".server");
         this.eventHandlers();
     };
 
@@ -32,12 +33,20 @@ function StudentGradeTable() {
         this.textInputs.keypress(this.validateKeypress);
         this.addButton.click(this.addButtonClicked.bind(this));
         this.cancelButton.click(this.cancelButtonClicked.bind(this)); // was experiencing cancel button error. need to use .bind(this)
+        this.serverButton.click(this.getServerData.bind(this));
     };
 
     this.validateKeypress = function(event) {
         if(event.keyCode === 13) {
             $(".add").click();
         }
+    };
+
+/**
+ * Get Server data AJAX call
+ */
+    this.getServerData = function() {
+      console.log('grabbing server data');
     };
 
 /**
