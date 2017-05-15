@@ -25,6 +25,7 @@ function StudentGradeTable() {
         this.cancelButton = $(".cancel");
         this.serverButton = $(".server");
         this.eventHandlers();
+        this.getServerData();
     };
 
 /**
@@ -80,6 +81,7 @@ this.getServerData = function() {
         },
         error: function(response) {
             console.error('error in ajax call', response);
+            self.errorModal();
         }
     });
 };
@@ -191,6 +193,17 @@ this.getServerData = function() {
     this.reset = function() {
         this.studentArr = [];
         this.clearStudentAddForm();
+    };
+
+    this.errorModal = function() {
+        console.log('error has occurred');
+        $("#modalHeader").text("ERROR HAS OCCURRED");
+        $(".modal-body div").remove();
+        var $errorDiv = $("<div>");
+        var $errorImg = $("<img src='500_error.jpeg' class='img-responsive' style='max-height: 250px;'>");
+        $errorDiv.append($errorImg);
+        $(".modal-body").append($errorDiv);
+        $("#errorModal").modal('show');
     };
 }
 
