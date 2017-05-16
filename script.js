@@ -68,6 +68,7 @@ this.getServerData = function() {
     console.log('grabbing server data');
     $.ajax({
         // url: 'getjson.php',
+        // url: 'get.json',
         url: 'http://s-apis.learningfuze.com/sgt/get',
         data: {
           'api_key': 'cAP8RUHTOI'
@@ -251,7 +252,7 @@ this.addStudentToServer = function(name, course, grade) {
         $("#modalHeader").text("ERROR HAS OCCURRED");
         $(".modal-body div").remove();
         var $errorDiv = $("<div>");
-        var $errorImg = $("<img src='500_error.jpeg' class='img-responsive' style='max-height: 250px;'>");
+        var $errorImg = $("<img src='500_error.jpeg' class='img-responsive'>");
         $errorDiv.append($errorImg);
         $(".modal-body").append($errorDiv);
         $("#errorModal").modal('show');
