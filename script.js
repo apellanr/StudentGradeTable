@@ -193,7 +193,7 @@ this.addStudentToServer = function(name, course, grade) {
             dataType: 'json',
             method: 'post',
             success : function(response) {
-                console.log(response);
+                console.log('deleteion worked!!!', response);
             },
             error : function(response) {
                 console.log("error in deletion process: ", response);
