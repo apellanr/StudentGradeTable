@@ -67,6 +67,7 @@ function StudentGradeTable() {
 this.getServerData = function() {
     console.log('grabbing server data');
     $.ajax({
+        // url: 'getjson.php',
         url: 'http://s-apis.learningfuze.com/sgt/get',
         data: {
           'api_key': 'cAP8RUHTOI'
@@ -105,6 +106,7 @@ this.addStudentToServer = function(name, course, grade) {
         method: 'post',
         success: function(data) {
             console.log('data sent to server: ', data);
+            self.studentArr[self.studentArr.length - 1].id = data.new_id;
 
         },
         error: function(data) {
@@ -129,7 +131,7 @@ this.addStudentToServer = function(name, course, grade) {
             return;
         }
         // eliminates users from entering input other than a num
-        if(isNaN(studentObj.grade)) {
+        if(isNaN(studentObj.grade) && studentObj.grade < 0) {
             return;
         }
         console.log("student obj test", studentObj);
@@ -173,10 +175,30 @@ this.addStudentToServer = function(name, course, grade) {
             $tRow.on('click', 'button', function(){
                 var deletePosition = $tRow.index(); // gets index of element relative to selector
                 $tRow.remove(); // need to remove the selected element
+                self.deleteStudentFromServer(self.studentArr[deletePosition]);
                 self.studentArr.splice(deletePosition, 1);
                 self.updateData();
             });
         })(this);
+    };
+
+    this.deleteStudentFromServer = function(object) {
+        console.log('deleting student from server');
+        $.ajax({
+            url: 'http://s-apis.learningfuze.com/sgt/delete',
+            data: {
+                'api_key': 'cAP8RUHTOI',
+                'student_id': object.id
+            },
+            dataType: 'json',
+            method: 'post',
+            success : function(response) {
+                console.log(response);
+            },
+            error : function(response) {
+                console.log("error in deletion process: ", response);
+            }
+        });
     };
 
 /**
