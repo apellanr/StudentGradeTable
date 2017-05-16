@@ -78,6 +78,8 @@ this.getServerData = function() {
         success : function(response) { // store response in a variable
             console.log(response);
             var server_data = response.data;
+            var hints = server_data.hint;
+            console.log("SGT hints: ", hints);
             self.studentArr = self.studentArr.concat(server_data);
             self.updateStudentList(self.studentArr);
             self.calculateAverage();
@@ -194,7 +196,7 @@ this.addStudentToServer = function(name, course, grade) {
             dataType: 'json',
             method: 'post',
             success : function(response) {
-                console.log('deleteion worked!!!', response);
+                console.log('deletion worked!!!', response);
             },
             error : function(response) {
                 console.log("error in deletion process: ", response);
