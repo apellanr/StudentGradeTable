@@ -25,6 +25,7 @@ function StudentGradeTable() {
         this.cancelButton = $(".cancel");
         this.serverButton = $(".server");
         this.eventHandlers();
+        this.getServerData();
     };
 
 /**
@@ -66,6 +67,8 @@ function StudentGradeTable() {
 this.getServerData = function() {
     console.log('grabbing server data');
     $.ajax({
+        // url: 'getjson.php',
+        // url: 'get.json',
         url: 'http://s-apis.learningfuze.com/sgt/get',
         data: {
           'api_key': 'cAP8RUHTOI'
@@ -73,13 +76,45 @@ this.getServerData = function() {
         dataType: 'json',
         method: 'post',
         success : function(response) { // store response in a variable
-            console.log('LFZ SGT response: ', response);
+            console.log(response);
             var server_data = response.data;
+            var hints = server_data.hint;
+            console.log("SGT hints: ", hints);
             self.studentArr = self.studentArr.concat(server_data);
             self.updateStudentList(self.studentArr);
+            self.calculateAverage();
         },
         error: function(response) {
             console.error('error in ajax call', response);
+            self.errorModal();
+        }
+    });
+};
+
+/**
+ * Upload to Server AJAX
+ * make sure to record the student's ID, given by the database
+ */
+this.addStudentToServer = function(name, course, grade) {
+    console.log('adding student to server');
+    $.ajax({
+        url: 'http://s-apis.learningfuze.com/sgt/create',
+        data: {
+            'api_key': 'cAP8RUHTOI',
+            'name': name,
+            'course': course,
+            'grade': grade
+        },
+        dataType: 'json',
+        method: 'post',
+        success: function(data) {
+            console.log('data sent to server: ', data);
+            self.studentArr[self.studentArr.length - 1].id = data.new_id;
+
+        },
+        error: function(data) {
+            console.log('error with data submission: ', data);
+            self.errorModal();
         }
     });
 };
@@ -89,21 +124,22 @@ this.getServerData = function() {
  * @return undefined
  */
     this.addStudent = function() {
-        var studentObject = { // need to pull values of input fields
+        var studentObj = { // need to pull values of input fields
             name: this.studentName.val(),
             course: this.studentCourse.val(),
             grade: this.studentGrade.val()
         };
         // users are required to input valid values into input fields
-        if(studentObject.name === '' || studentObject.course === '' || studentObject.grade === '') {
+        if(studentObj.name === '' || studentObj.course === '' || studentObj.grade === '') {
             return;
         }
         // eliminates users from entering input other than a num
-        if(isNaN(studentObject.grade)) {
+        if(isNaN(studentObj.grade) && studentObj.grade < 0) {
             return;
         }
-        console.log("student obj test", studentObject);
-        this.studentArr.push(studentObject);
+        console.log("student obj test", studentObj);
+        this.studentArr.push(studentObj);
+        this.addStudentToServer(studentObj.name, studentObj.course, studentObj.grade);
         this.clearStudentAddForm();
     };
 
@@ -142,10 +178,30 @@ this.getServerData = function() {
             $tRow.on('click', 'button', function(){
                 var deletePosition = $tRow.index(); // gets index of element relative to selector
                 $tRow.remove(); // need to remove the selected element
+                self.deleteStudentFromServer(self.studentArr[deletePosition]);
                 self.studentArr.splice(deletePosition, 1);
                 self.updateData();
             });
         })(this);
+    };
+
+    this.deleteStudentFromServer = function(object) {
+        console.log('deleting student from server');
+        $.ajax({
+            url: 'http://s-apis.learningfuze.com/sgt/delete',
+            data: {
+                'api_key': 'cAP8RUHTOI',
+                'student_id': object.id
+            },
+            dataType: 'json',
+            method: 'post',
+            success : function(response) {
+                console.log('deletion worked!!!', response);
+            },
+            error : function(response) {
+                console.log("error in deletion process: ", response);
+            }
+        });
     };
 
 /**
@@ -168,7 +224,6 @@ this.getServerData = function() {
         for(var i = 0; i < this.studentArr.length; i++) {
             gradeValue = parseInt(this.studentArr[i].grade);
             gradeTotal += gradeValue; // concatenate gradeValue to total
-            console.log(gradeTotal);
         }
         average = Math.floor(gradeTotal / this.studentArr.length);
         console.log("testing average calc", average);
@@ -192,6 +247,17 @@ this.getServerData = function() {
     this.reset = function() {
         this.studentArr = [];
         this.clearStudentAddForm();
+    };
+
+    this.errorModal = function() {
+        console.log('error has occurred');
+        $("#modalHeader").text("ERROR HAS OCCURRED");
+        $(".modal-body div").remove();
+        var $errorDiv = $("<div>");
+        var $errorImg = $("<img src='500_error.jpeg' class='img-responsive'>");
+        $errorDiv.append($errorImg);
+        $(".modal-body").append($errorDiv);
+        $("#errorModal").modal('show');
     };
 }
 
